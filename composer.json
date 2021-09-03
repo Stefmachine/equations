@@ -1,0 +1,29 @@
+{
+    "name": "stefmachine/equations",
+    "description": "A simple PHP library for building, dumping and evaluating math equations",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "stephanegodin",
+            "email": "stephanegodin@outlook.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^7.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Stefmachine\\Equations\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Stefmachine\\EquationsTests\\": "tests/"
+        }
+    }
+}
