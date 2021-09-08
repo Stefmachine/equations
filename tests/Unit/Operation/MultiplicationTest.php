@@ -14,7 +14,7 @@ class MultiplicationTest extends EquationTest
 {
     protected function getValidInstance(ForwardTesterMockGenerator $_generator): EquationInterface
     {
-        return new Multiplication($_generator->make(1), $_generator->make(1));
+        return new Multiplication($_generator->make(1), $_generator->make(1), $_generator->make(1));
     }
     
     

@@ -14,7 +14,7 @@ class AdditionTest extends EquationTest
 {
     protected function getValidInstance(ForwardTesterMockGenerator $_generator): EquationInterface
     {
-        return new Addition($_generator->make(1), $_generator->make(1));
+        return new Addition($_generator->make(1), $_generator->make(1), $_generator->make(1));
     }
     
     
