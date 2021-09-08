@@ -16,35 +16,25 @@ class Division implements EquationOperationInterface
     protected $dividend;
     protected $divisor;
     
-    public function __construct($_dividend, $_divisor)
+    public function __construct(EquationInterface $_dividend, EquationInterface $_divisor)
     {
-        $this->dividend = EqHelper::parseValue($_dividend);
-        $this->divisor = EqHelper::parseValue($_divisor);
+        $this->dividend = $_dividend;
+        $this->divisor = $_divisor;
     }
     
     public function toString(array $_values = array(), array $_options = array()): string
     {
-        return EqHelper::join([EqHelper::wrap($this->getDividend()), ' / ', EqHelper::wrap($this->getDivisor())], $_values, $_options);
+        return EqHelper::join([EqHelper::wrap($this->dividend), ' / ', EqHelper::wrap($this->divisor)], $_values, $_options);
     }
     
     protected function tryEval(array $_values = array(), array $_options = array()): float
     {
-        $divisor = $this->getDivisor()->eval($_values, $_options);
+        $divisor = $this->divisor->eval($_values, $_options);
         
         if($divisor == 0){
             throw new EquationEvaluationException("Attempted to divide by zero in equation: {equation}", $this, $_values);
         }
         
-        return $this->getDividend()->eval($_values, $_options) / $divisor;
-    }
-    
-    protected function getDividend(): EquationInterface
-    {
-        return $this->dividend;
-    }
-    
-    protected function getDivisor(): EquationInterface
-    {
-        return $this->divisor;
+        return $this->dividend->eval($_values, $_options) / $divisor;
     }
 }

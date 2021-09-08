@@ -4,31 +4,26 @@
 namespace Stefmachine\EquationsTests\Unit\Operation;
 
 
-use PHPUnit\Framework\TestCase;
-use Stefmachine\Equations\Exception\EquationEvaluationException;
-use Stefmachine\Equations\Exception\EquationException;
+use Stefmachine\Equations\EquationInterface;
 use Stefmachine\Equations\Operation\Absolute;
+use Stefmachine\EquationsTests\Base\EquationTest;
+use Stefmachine\EquationsTests\Mock\EquationValueMock;
+use Stefmachine\EquationsTests\Mock\ForwardTesterMockGenerator;
 
-class AbsoluteTest extends TestCase
+class AbsoluteTest extends EquationTest
 {
-    // CONSTRUCTOR
-    /**
-     * @test
-     */
-    public function Should_ThrowException_WhenConstructingWithInvalidValueOrVariable()
+    protected function getValidInstance(ForwardTesterMockGenerator $_generator): EquationInterface
     {
-        $this->expectException(EquationException::class);
-        
-        new Absolute('$123');
+        return new Absolute($_generator->make(1));
     }
     
-    // TO STRING
+    
     /**
      * @test
      */
     public function Should_ReturnString_WhenUsingToString()
     {
-        $instance = new Absolute(1);
+        $instance = new Absolute(EquationValueMock::mock(1));
         
         $this->assertSame('|1|', $instance->toString());
     }
@@ -36,30 +31,9 @@ class AbsoluteTest extends TestCase
     /**
      * @test
      */
-    public function Should_ReturnStringWithVariable_WhenUsingToStringWithoutVariable()
-    {
-        $instance = new Absolute('x');
-        
-        $this->assertSame('|x|', $instance->toString());
-    }
-    
-    /**
-     * @test
-     */
-    public function Should_ReturnStringWithResolvedVariable_WhenUsingToStringWithVariableResolved()
-    {
-        $instance = new Absolute('x');
-        
-        $this->assertSame('|1|', $instance->toString(['x' => 1]));
-    }
-    
-    // EVAL
-    /**
-     * @test
-     */
     public function Should_ReturnResult_WhenUsingEval()
     {
-        $instance = new Absolute(1);
+        $instance = new Absolute(EquationValueMock::mock(1));
     
         $this->assertSame(1.0, $instance->eval());
     }
@@ -69,29 +43,8 @@ class AbsoluteTest extends TestCase
      */
     public function Should_ReturnPositiveResult_WhenUsingEvalWithNegativeValue()
     {
-        $instance = new Absolute(-1);
+        $instance = new Absolute(EquationValueMock::mock(-1));
     
         $this->assertSame(1.0, $instance->eval());
-    }
-    
-    /**
-     * @test
-     */
-    public function Should_ReturnResult_WhenUsingEvalWithResolvedVariable()
-    {
-        $instance = new Absolute('x');
-    
-        $this->assertSame(1.0, $instance->eval(['x' => 1]));
-    }
-    
-    /**
-     * @test
-     */
-    public function Should_ThrowException_WhenUsingEvalWithoutVariable()
-    {
-        $this->expectException(EquationEvaluationException::class);
-        
-        $instance = new Absolute('x');
-        $instance->eval();
     }
 }

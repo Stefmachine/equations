@@ -4,31 +4,26 @@
 namespace Stefmachine\EquationsTests\Unit\Operation;
 
 
-use PHPUnit\Framework\TestCase;
-use Stefmachine\Equations\Exception\EquationEvaluationException;
-use Stefmachine\Equations\Exception\EquationException;
+use Stefmachine\Equations\EquationInterface;
 use Stefmachine\Equations\Operation\Parentheses;
+use Stefmachine\EquationsTests\Base\EquationTest;
+use Stefmachine\EquationsTests\Mock\EquationValueMock;
+use Stefmachine\EquationsTests\Mock\ForwardTesterMockGenerator;
 
-class ParenthesesTest extends TestCase
+class ParenthesesTest extends EquationTest
 {
-    // CONSTRUCTOR
-    /**
-     * @test
-     */
-    public function Should_ThrowException_WhenConstructingWithInvalidValueOrVariable()
+    protected function getValidInstance(ForwardTesterMockGenerator $_generator): EquationInterface
     {
-        $this->expectException(EquationException::class);
-        
-        new Parentheses('$123');
+        return new Parentheses($_generator->make(1));
     }
     
-    // TO STRING
+    
     /**
      * @test
      */
     public function Should_ReturnString_WhenUsingToString()
     {
-        $instance = new Parentheses(1);
+        $instance = new Parentheses(EquationValueMock::mock(1));
         
         $this->assertSame('(1)', $instance->toString());
     }
@@ -36,62 +31,10 @@ class ParenthesesTest extends TestCase
     /**
      * @test
      */
-    public function Should_ReturnWrappedEquation_WhenUsingToString()
+    public function Should_ReturnValue_WhenUsingEval()
     {
-        $instance = new Parentheses(new Parentheses('x'));
-        
-        $this->assertSame('((x))', $instance->toString());
-    }
-    
-    /**
-     * @test
-     */
-    public function Should_ReturnStringWithVariable_WhenUsingToStringWithoutVariable()
-    {
-        $instance = new Parentheses('x');
-        
-        $this->assertSame('(x)', $instance->toString());
-    }
-    
-    /**
-     * @test
-     */
-    public function Should_ReturnStringWithResolvedVariable_WhenUsingToStringWithVariableResolved()
-    {
-        $instance = new Parentheses('x');
-        
-        $this->assertSame('(1)', $instance->toString(['x' => 1]));
-    }
-    
-    // EVAL
-    /**
-     * @test
-     */
-    public function Should_ReturnResult_WhenUsingEval()
-    {
-        $instance = new Parentheses(1);
+        $instance = new Parentheses(EquationValueMock::mock(1));
     
         $this->assertSame(1.0, $instance->eval());
-    }
-    
-    /**
-     * @test
-     */
-    public function Should_ReturnResult_WhenUsingEvalWithResolvedVariable()
-    {
-        $instance = new Parentheses('x');
-    
-        $this->assertSame(1.0, $instance->eval(['x' => 1]));
-    }
-    
-    /**
-     * @test
-     */
-    public function Should_ThrowException_WhenUsingEvalWithoutVariable()
-    {
-        $this->expectException(EquationEvaluationException::class);
-        
-        $instance = new Parentheses('x');
-        $instance->eval();
     }
 }

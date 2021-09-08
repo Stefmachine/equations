@@ -4,31 +4,26 @@
 namespace Stefmachine\EquationsTests\Unit\Operation;
 
 
-use PHPUnit\Framework\TestCase;
-use Stefmachine\Equations\Exception\EquationEvaluationException;
-use Stefmachine\Equations\Exception\EquationException;
+use Stefmachine\Equations\EquationInterface;
 use Stefmachine\Equations\Operation\Ceiling;
+use Stefmachine\EquationsTests\Base\EquationTest;
+use Stefmachine\EquationsTests\Mock\EquationValueMock;
+use Stefmachine\EquationsTests\Mock\ForwardTesterMockGenerator;
 
-class CeilingTest extends TestCase
+class CeilingTest extends EquationTest
 {
-    // CONSTRUCTOR
-    /**
-     * @test
-     */
-    public function Should_ThrowException_WhenConstructingWithInvalidValueOrVariable()
+    protected function getValidInstance(ForwardTesterMockGenerator $_generator): EquationInterface
     {
-        $this->expectException(EquationException::class);
-        
-        new Ceiling('$123');
+        return new Ceiling($_generator->make(1));
     }
     
-    // TO STRING
+    
     /**
      * @test
      */
     public function Should_ReturnString_WhenUsingToString()
     {
-        $instance = new Ceiling(1);
+        $instance = new Ceiling(EquationValueMock::mock(1));
         
         $this->assertSame('⌈1⌉', $instance->toString());
     }
@@ -36,30 +31,9 @@ class CeilingTest extends TestCase
     /**
      * @test
      */
-    public function Should_ReturnStringWithVariable_WhenUsingToStringWithoutVariable()
-    {
-        $instance = new Ceiling('x');
-        
-        $this->assertSame('⌈x⌉', $instance->toString());
-    }
-    
-    /**
-     * @test
-     */
-    public function Should_ReturnStringWithResolvedVariable_WhenUsingToStringWithVariableResolved()
-    {
-        $instance = new Ceiling('x');
-        
-        $this->assertSame('⌈1⌉', $instance->toString(['x' => 1]));
-    }
-    
-    // EVAL
-    /**
-     * @test
-     */
     public function Should_ReturnHigherIntegerResult_WhenUsingEval()
     {
-        $instance = new Ceiling(1.5);
+        $instance = new Ceiling(EquationValueMock::mock(1.5));
     
         $this->assertSame(2.0, $instance->eval());
     }
@@ -69,29 +43,8 @@ class CeilingTest extends TestCase
      */
     public function Should_ReturnHigherIntegerResult_WhenUsingEvalWithNegativeValue()
     {
-        $instance = new Ceiling(-1.5);
+        $instance = new Ceiling(EquationValueMock::mock(-1.5));
     
         $this->assertSame(-1.0, $instance->eval());
-    }
-    
-    /**
-     * @test
-     */
-    public function Should_ReturnResult_WhenUsingEvalWithResolvedVariable()
-    {
-        $instance = new Ceiling('x');
-    
-        $this->assertSame(2.0, $instance->eval(['x' => 1.5]));
-    }
-    
-    /**
-     * @test
-     */
-    public function Should_ThrowException_WhenUsingEvalWithoutVariable()
-    {
-        $this->expectException(EquationEvaluationException::class);
-        
-        $instance = new Ceiling('x');
-        $instance->eval();
     }
 }

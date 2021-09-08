@@ -23,27 +23,23 @@ class Variable implements EquationValueInterface
     
     public function toString(array $_values = array(), array $_options = array()): string
     {
-        $value = self::getValue($this->id, $_values);
+        $value = $this->resolveValue($this->id, $_values);
     
-        return Variable::boxCircularEvaluation($this->id, function() use ($value, $_values){
-            return $value->toString($_values);
-        }, $this->id);
+        return $value instanceof Variable && $value->id === $this->id ? $this->id : $value->toString($_values);
     }
     
     public function eval(array $_values = array(), array $_options = array()): float
     {
-        $value = self::getValue($this->id, $_values);
+        $value = $this->resolveValue($this->id, $_values);
         
         if($value instanceof Variable && $value->id === $this->id){
             throw new EquationEvaluationException("Could not evaluate equation. Missing variable value '{$this->id}' in equation: {equation}.", $this, $_values);
         }
     
-        return Variable::boxCircularEvaluation($this->id, function() use ($value, &$_values, &$_options){
-            return $value->eval($_values, $_options);
-        }, new EquationEvaluationException("Circular variable definition found on variable '{$this->id}' in equation: {equation}"));
+        return $value->eval($_values, $_options);
     }
     
-    private static function getValue(string $_variable, array $_values): EquationValueInterface
+    private function resolveValue(string $_variable, array $_values, $_visited = array()): EquationValueInterface
     {
         if(array_key_exists($_variable, $_values)){
             if(EqHelper::isValidValue($_values[$_variable])){
@@ -51,28 +47,12 @@ class Variable implements EquationValueInterface
             }
             
             if(EqHelper::isValidVariableName($_values[$_variable])){
-                return new Variable($_values[$_variable]);
+                if(!in_array($_values[$_variable], $_visited)){
+                    return $this->resolveValue($_values[$_variable], $_values, array_merge($_visited, [$_values[$_variable]]));
+                }
             }
         }
         
         return new Variable($_variable);
-    }
-    
-    private static function boxCircularEvaluation(string $_id, callable $_callable, $_onFailValue)
-    {
-        static $variableCircularIndex = array();
-        
-        if(array_key_exists($_id, $variableCircularIndex) && $variableCircularIndex[$_id]){
-            if($_onFailValue instanceof EquationException){
-                throw $_onFailValue;
-            }
-            
-            return $_onFailValue;
-        }
-        
-        $variableCircularIndex[$_id] = true;
-        $result = call_user_func($_callable);
-        $variableCircularIndex[$_id] = false;
-        return $result;
     }
 }

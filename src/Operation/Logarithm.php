@@ -16,35 +16,25 @@ class Logarithm implements EquationOperationInterface
     protected $base;
     protected $argument;
     
-    public function __construct($_base, $_argument)
+    public function __construct(EquationInterface $_base, EquationInterface $_argument)
     {
-        $this->base = EqHelper::parseValue($_base);
-        $this->argument = EqHelper::parseValue($_argument);
+        $this->base = $_base;
+        $this->argument = $_argument;
     }
     
     public function toString(array $_values = array(), array $_options = array()): string
     {
-        return EqHelper::join(['log', EqHelper::wrap($this->getBase(), false),' ', EqHelper::wrap($this->getArgument())], $_values, $_options);
+        return EqHelper::join(['log', EqHelper::wrap($this->base, false),' ', EqHelper::wrap($this->argument)], $_values, $_options);
     }
     
     public function tryEval(array $_values = array(), array $_options = array()): float
     {
-        $base = $this->getBase()->eval($_values, $_options);
+        $base = $this->base->eval($_values, $_options);
         
         if($base <= 0){
             throw new EquationEvaluationException("Attempted to evaluate logarithm with base lesser than or equal to 0.", $this, $_values);
         }
         
-        return log($this->getArgument()->eval($_values, $_options), $base);
-    }
-    
-    protected function getBase(): EquationInterface
-    {
-        return $this->base;
-    }
-    
-    protected function getArgument(): EquationInterface
-    {
-        return $this->argument;
+        return log($this->argument->eval($_values, $_options), $base);
     }
 }

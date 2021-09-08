@@ -14,23 +14,18 @@ class Parentheses implements EquationOperationInterface
     
     protected $subject;
     
-    public function __construct($_subject)
+    public function __construct(EquationInterface $_subject)
     {
-        $this->subject = EqHelper::parseValue($_subject);
+        $this->subject = $_subject;
     }
     
     public function toString(array $_values = array(), array $_options = array()): string
     {
-        return "({$this->getSubject()->toString($_values)})";
+        return "({$this->subject->toString($_values, $_options)})";
     }
     
     protected function tryEval(array $_values = array(), array $_options = array()): float
     {
-        return $this->getSubject()->eval($_values, $_options);
-    }
-    
-    protected function getSubject(): EquationInterface
-    {
-        return $this->subject;
+        return $this->subject->eval($_values, $_options);
     }
 }

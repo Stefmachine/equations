@@ -4,31 +4,26 @@
 namespace Stefmachine\EquationsTests\Unit\Operation;
 
 
-use PHPUnit\Framework\TestCase;
-use Stefmachine\Equations\Exception\EquationEvaluationException;
-use Stefmachine\Equations\Exception\EquationException;
+use Stefmachine\Equations\EquationInterface;
 use Stefmachine\Equations\Operation\Floor;
+use Stefmachine\EquationsTests\Base\EquationTest;
+use Stefmachine\EquationsTests\Mock\EquationValueMock;
+use Stefmachine\EquationsTests\Mock\ForwardTesterMockGenerator;
 
-class FloorTest extends TestCase
+class FloorTest extends EquationTest
 {
-    // CONSTRUCTOR
-    /**
-     * @test
-     */
-    public function Should_ThrowException_WhenConstructingWithInvalidValueOrVariable()
+    protected function getValidInstance(ForwardTesterMockGenerator $_generator): EquationInterface
     {
-        $this->expectException(EquationException::class);
-        
-        new Floor('$123');
+        return new Floor($_generator->make(1));
     }
     
-    // TO STRING
+    
     /**
      * @test
      */
     public function Should_ReturnString_WhenUsingToString()
     {
-        $instance = new Floor(1);
+        $instance = new Floor(EquationValueMock::mock(1));
         
         $this->assertSame('⌊1⌋', $instance->toString());
     }
@@ -36,30 +31,9 @@ class FloorTest extends TestCase
     /**
      * @test
      */
-    public function Should_ReturnStringWithVariable_WhenUsingToStringWithoutVariable()
-    {
-        $instance = new Floor('x');
-        
-        $this->assertSame('⌊x⌋', $instance->toString());
-    }
-    
-    /**
-     * @test
-     */
-    public function Should_ReturnStringWithResolvedVariable_WhenUsingToStringWithVariableResolved()
-    {
-        $instance = new Floor('x');
-        
-        $this->assertSame('⌊1⌋', $instance->toString(['x' => 1]));
-    }
-    
-    // EVAL
-    /**
-     * @test
-     */
     public function Should_ReturnLowerIntegerResult_WhenUsingEval()
     {
-        $instance = new Floor(1.5);
+        $instance = new Floor(EquationValueMock::mock(1.5));
     
         $this->assertSame(1.0, $instance->eval());
     }
@@ -69,29 +43,8 @@ class FloorTest extends TestCase
      */
     public function Should_ReturnLowerIntegerResult_WhenUsingEvalWithNegativeValue()
     {
-        $instance = new Floor(-1.5);
+        $instance = new Floor(EquationValueMock::mock(-1.5));
     
         $this->assertSame(-2.0, $instance->eval());
-    }
-    
-    /**
-     * @test
-     */
-    public function Should_ReturnResult_WhenUsingEvalWithResolvedVariable()
-    {
-        $instance = new Floor('x');
-    
-        $this->assertSame(1.0, $instance->eval(['x' => 1.5]));
-    }
-    
-    /**
-     * @test
-     */
-    public function Should_ThrowException_WhenUsingEvalWithoutVariable()
-    {
-        $this->expectException(EquationEvaluationException::class);
-        
-        $instance = new Floor('x');
-        $instance->eval();
     }
 }

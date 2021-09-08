@@ -4,31 +4,27 @@
 namespace Stefmachine\EquationsTests\Unit\Operation;
 
 
-use PHPUnit\Framework\TestCase;
+use Stefmachine\Equations\EquationInterface;
 use Stefmachine\Equations\Exception\EquationEvaluationException;
-use Stefmachine\Equations\Exception\EquationException;
 use Stefmachine\Equations\Operation\Factorial;
+use Stefmachine\EquationsTests\Base\EquationTest;
+use Stefmachine\EquationsTests\Mock\EquationValueMock;
+use Stefmachine\EquationsTests\Mock\ForwardTesterMockGenerator;
 
-class FactorialTest extends TestCase
+class FactorialTest extends EquationTest
 {
-    // CONSTRUCTOR
-    /**
-     * @test
-     */
-    public function Should_ThrowException_WhenConstructingWithInvalidValueOrVariable()
+    protected function getValidInstance(ForwardTesterMockGenerator $_generator): EquationInterface
     {
-        $this->expectException(EquationException::class);
-        
-        new Factorial('$123');
+        return new Factorial($_generator->make(1));
     }
     
-    // TO STRING
+    
     /**
      * @test
      */
     public function Should_ReturnString_WhenUsingToString()
     {
-        $instance = new Factorial(1);
+        $instance = new Factorial(EquationValueMock::mock(1));
         
         $this->assertSame('1!', $instance->toString());
     }
@@ -36,30 +32,9 @@ class FactorialTest extends TestCase
     /**
      * @test
      */
-    public function Should_ReturnStringWithVariable_WhenUsingToStringWithoutVariable()
-    {
-        $instance = new Factorial('x');
-        
-        $this->assertSame('x!', $instance->toString());
-    }
-    
-    /**
-     * @test
-     */
-    public function Should_ReturnStringWithResolvedVariable_WhenUsingToStringWithVariableResolved()
-    {
-        $instance = new Factorial('x');
-        
-        $this->assertSame('1!', $instance->toString(['x' => 1]));
-    }
-    
-    // EVAL
-    /**
-     * @test
-     */
     public function Should_ReturnResult_WhenUsingEval()
     {
-        $instance = new Factorial(5);
+        $instance = new Factorial(EquationValueMock::mock(5));
     
         $this->assertSame(120.0, $instance->eval());
     }
@@ -67,32 +42,11 @@ class FactorialTest extends TestCase
     /**
      * @test
      */
-    public function Should_ReturnResult_WhenUsingEvalWithResolvedVariable()
-    {
-        $instance = new Factorial('x');
-    
-        $this->assertSame(120.0, $instance->eval(['x' => 5]));
-    }
-    
-    /**
-     * @test
-     */
     public function Should_ReturnOne_WhenUsingEvalWithZero()
     {
-        $instance = new Factorial(0);
+        $instance = new Factorial(EquationValueMock::mock(0));
     
         $this->assertSame(1.0, $instance->eval());
-    }
-    
-    /**
-     * @test
-     */
-    public function Should_ThrowException_WhenUsingEvalWithoutVariable()
-    {
-        $this->expectException(EquationEvaluationException::class);
-        
-        $instance = new Factorial('x');
-        $instance->eval();
     }
     
     /**
@@ -102,7 +56,7 @@ class FactorialTest extends TestCase
     {
         $this->expectException(EquationEvaluationException::class);
         
-        $instance = new Factorial(-1);
+        $instance = new Factorial(EquationValueMock::mock(-1));
         $instance->eval();
     }
 }

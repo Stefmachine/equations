@@ -15,29 +15,19 @@ class Subtraction implements EquationOperationInterface
     protected $minuend;
     protected $subtrahend;
     
-    public function __construct($_minuend, $_subtrahend)
+    public function __construct(EquationInterface $_minuend, EquationInterface $_subtrahend)
     {
-        $this->minuend = EqHelper::parseValue($_minuend);
-        $this->subtrahend = EqHelper::parseValue($_subtrahend);
+        $this->minuend = $_minuend;
+        $this->subtrahend = $_subtrahend;
     }
     
     public function toString(array $_values = array(), array $_options = array()): string
     {
-        return EqHelper::join([EqHelper::wrap($this->getMinuend()), ' - ', EqHelper::wrap($this->getSubtrahend())], $_values, $_options);
+        return EqHelper::join([EqHelper::wrap($this->minuend), ' - ', EqHelper::wrap($this->subtrahend)], $_values, $_options);
     }
     
     protected function tryEval(array $_values = array(), array $_options = array()): float
     {
-        return $this->getMinuend()->eval($_values, $_options) - $this->getSubtrahend()->eval($_values, $_options);
-    }
-    
-    protected function getMinuend(): EquationInterface
-    {
-        return $this->minuend;
-    }
-    
-    protected function getSubtrahend(): EquationInterface
-    {
-        return $this->subtrahend;
+        return $this->minuend->eval($_values, $_options) - $this->subtrahend->eval($_values, $_options);
     }
 }

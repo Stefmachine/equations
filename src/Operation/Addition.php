@@ -12,34 +12,22 @@ class Addition implements EquationOperationInterface
 {
     use EvalCatchTrait;
     
-    /** @var EquationInterface */
     protected $addendA;
-    /** @var EquationInterface */
     protected $addendB;
     
-    public function __construct($_addendA, $_addendB)
+    public function __construct(EquationInterface $_addendA, EquationInterface $_addendB)
     {
-        $this->addendA = EqHelper::parseValue($_addendA);
-        $this->addendB = EqHelper::parseValue($_addendB);
+        $this->addendA = $_addendA;
+        $this->addendB = $_addendB;
     }
     
     public function toString(array $_values = array(), array $_options = array()): string
     {
-        return EqHelper::join([EqHelper::wrap($this->getAddendA()), ' + ', EqHelper::wrap($this->getAddendB())], $_values, $_options);
+        return EqHelper::join([EqHelper::wrap($this->addendA), ' + ', EqHelper::wrap($this->addendB)], $_values, $_options);
     }
     
     protected function tryEval(array $_values = array(), array $_options = array()): float
     {
-        return $this->getAddendA()->eval($_values, $_options) + $this->getAddendB()->eval($_values, $_options);
-    }
-    
-    protected function getAddendA(): EquationInterface
-    {
-        return $this->addendA;
-    }
-    
-    protected function getAddendB(): EquationInterface
-    {
-        return $this->addendB;
+        return $this->addendA->eval($_values, $_options) + $this->addendB->eval($_values, $_options);
     }
 }

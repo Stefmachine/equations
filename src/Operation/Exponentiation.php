@@ -16,21 +16,21 @@ class Exponentiation implements EquationOperationInterface
     protected $base;
     protected $exponent;
     
-    public function __construct($_base, $_exponent)
+    public function __construct(EquationInterface $_base, EquationInterface $_exponent)
     {
-        $this->base = EqHelper::parseValue($_base);
-        $this->exponent = EqHelper::parseValue($_exponent);
+        $this->base = $_base;
+        $this->exponent = $_exponent;
     }
     
     public function toString(array $_values = array(), array $_options = array()): string
     {
-        return EqHelper::join([EqHelper::wrap($this->getBase()), ' ^ ', EqHelper::wrap($this->getExponent())], $_values, $_options);
+        return EqHelper::join([EqHelper::wrap($this->base), ' ^ ', EqHelper::wrap($this->exponent)], $_values, $_options);
     }
     
     protected function tryEval(array $_values = array(), array $_options = array()): float
     {
-        $exponent = $this->getExponent()->eval($_values, $_options);
-        $base = $this->getBase()->eval($_values, $_options);
+        $exponent = $this->exponent->eval($_values, $_options);
+        $base = $this->base->eval($_values, $_options);
         
         if($exponent > 0 && $exponent < 1 && $base < 0){
             throw new EquationEvaluationException("Attempted to evaluate root of negative number in equation: {equation}", $this, $_values);
@@ -41,15 +41,5 @@ class Exponentiation implements EquationOperationInterface
         }
         
         return $base ** $exponent;
-    }
-    
-    protected function getBase(): EquationInterface
-    {
-        return $this->base;
-    }
-    
-    protected function getExponent(): EquationInterface
-    {
-        return $this->exponent;
     }
 }

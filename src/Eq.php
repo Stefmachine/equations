@@ -4,6 +4,7 @@
 namespace Stefmachine\Equations;
 
 
+use Stefmachine\Equations\Helper\EqHelper;
 use Stefmachine\Equations\Operation\Absolute;
 use Stefmachine\Equations\Operation\ArcCosine;
 use Stefmachine\Equations\Operation\ArcSine;
@@ -30,57 +31,57 @@ class Eq
     // OPERATIONS
     public static function plus($_addendA, $_addendB): Addition
     {
-        return new Addition($_addendA, $_addendB);
+        return new Addition(EqHelper::parseValue($_addendA), EqHelper::parseValue($_addendB));
     }
     
     public static function minus($_minuend, $_subtrahend): Subtraction
     {
-        return new Subtraction($_minuend, $_subtrahend);
+        return new Subtraction(EqHelper::parseValue($_minuend), EqHelper::parseValue($_subtrahend));
     }
     
     public static function multiply($_factorA, $_factorB): Multiplication
     {
-        return new Multiplication($_factorA, $_factorB);
+        return new Multiplication(EqHelper::parseValue($_factorA), EqHelper::parseValue($_factorB));
     }
     
     public static function divide($_dividend, $_divisor): Division
     {
-        return new Division($_dividend, $_divisor);
+        return new Division(EqHelper::parseValue($_dividend), EqHelper::parseValue($_divisor));
     }
     
     public static function mod($_dividend, $_divisor): Modulo
     {
-        return new Modulo($_dividend, $_divisor);
+        return new Modulo(EqHelper::parseValue($_dividend), EqHelper::parseValue($_divisor));
     }
     
     public static function power($_base, $_exponent): Exponentiation
     {
-        return new Exponentiation($_base, $_exponent);
+        return new Exponentiation(EqHelper::parseValue($_base), EqHelper::parseValue($_exponent));
     }
     
     public static function root($_rootIndex, $_radicand): Exponentiation
     {
-        return new Exponentiation($_radicand, Eq::divide(1, $_rootIndex));
+        return new Exponentiation(EqHelper::parseValue($_radicand), Eq::divide(1, $_rootIndex));
     }
     
     public static function log($_base, $_argument): Logarithm
     {
-        return new Logarithm($_base, $_argument);
+        return new Logarithm(EqHelper::parseValue($_base), EqHelper::parseValue($_argument));
     }
     
     public static function ln($_argument): Logarithm
     {
-        return new Logarithm(Eq::e(), $_argument);
+        return new Logarithm(Eq::e(), EqHelper::parseValue($_argument));
     }
     
     public static function abs($_value): Absolute
     {
-        return new Absolute($_value);
+        return new Absolute(EqHelper::parseValue($_value));
     }
     
     public static function floor($_value): Floor
     {
-        return new Floor($_value);
+        return new Floor(EqHelper::parseValue($_value));
     }
     
     public static function round($_value): Floor
@@ -90,27 +91,27 @@ class Eq
     
     public static function ceil($_value): Ceiling
     {
-        return new Ceiling($_value);
+        return new Ceiling(EqHelper::parseValue($_value));
     }
     
     public static function fact($_value): Factorial
     {
-        return new Factorial($_value);
+        return new Factorial(EqHelper::parseValue($_value));
     }
     
     public static function sin($_value): Sine
     {
-        return new Sine($_value);
+        return new Sine(EqHelper::parseValue($_value));
     }
     
     public static function cos($_value): Cosine
     {
-        return new Cosine($_value);
+        return new Cosine(EqHelper::parseValue($_value));
     }
     
     public static function tan($_value): Tangent
     {
-        return new Tangent($_value);
+        return new Tangent(EqHelper::parseValue($_value));
     }
     
     // VALUES

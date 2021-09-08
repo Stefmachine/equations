@@ -4,31 +4,27 @@
 namespace Stefmachine\EquationsTests\Unit\Operation;
 
 
-use PHPUnit\Framework\TestCase;
+use Stefmachine\Equations\EquationInterface;
 use Stefmachine\Equations\Exception\EquationEvaluationException;
-use Stefmachine\Equations\Exception\EquationException;
 use Stefmachine\Equations\Operation\Logarithm;
+use Stefmachine\EquationsTests\Base\EquationTest;
+use Stefmachine\EquationsTests\Mock\EquationValueMock;
+use Stefmachine\EquationsTests\Mock\ForwardTesterMockGenerator;
 
-class LogarithmTest extends TestCase
+class LogarithmTest extends EquationTest
 {
-    // CONSTRUCTOR
-    /**
-     * @test
-     */
-    public function Should_ThrowException_WhenConstructingWithInvalidValueOrVariable()
+    protected function getValidInstance(ForwardTesterMockGenerator $_generator): EquationInterface
     {
-        $this->expectException(EquationException::class);
-        
-        new Logarithm('$123', 1);
+        return new Logarithm($_generator->make(10), $_generator->make(1));
     }
     
-    // TO STRING
+    
     /**
      * @test
      */
     public function Should_ReturnString_WhenUsingToString()
     {
-        $instance = new Logarithm(1, 3);
+        $instance = new Logarithm(EquationValueMock::mock(1), EquationValueMock::mock(3));
         
         $this->assertSame('log(1) 3', $instance->toString());
     }
@@ -36,53 +32,11 @@ class LogarithmTest extends TestCase
     /**
      * @test
      */
-    public function Should_ReturnStringWithVariable_WhenUsingToStringWithoutVariable()
-    {
-        $instance = new Logarithm('x', 3);
-        
-        $this->assertSame('log(x) 3', $instance->toString());
-    }
-    
-    /**
-     * @test
-     */
-    public function Should_ReturnStringWithResolvedVariable_WhenUsingToStringWithVariableResolved()
-    {
-        $instance = new Logarithm('x', 3);
-        
-        $this->assertSame('log(1) 3', $instance->toString(['x' => 1]));
-    }
-    
-    // EVAL
-    /**
-     * @test
-     */
     public function Should_ReturnResult_WhenUsingEval()
     {
-        $instance = new Logarithm(10, 1);
+        $instance = new Logarithm(EquationValueMock::mock(10), EquationValueMock::mock(1));
     
         $this->assertSame(0.0, $instance->eval());
-    }
-    
-    /**
-     * @test
-     */
-    public function Should_ReturnResult_WhenUsingEvalWithResolvedVariable()
-    {
-        $instance = new Logarithm('x', 1);
-    
-        $this->assertSame(0.0, $instance->eval(['x' => 10]));
-    }
-    
-    /**
-     * @test
-     */
-    public function Should_ThrowException_WhenUsingEvalWithoutVariable()
-    {
-        $this->expectException(EquationEvaluationException::class);
-        
-        $instance = new Logarithm('x', 1);
-        $instance->eval();
     }
     
     /**
@@ -92,18 +46,18 @@ class LogarithmTest extends TestCase
     {
         $this->expectException(EquationEvaluationException::class);
         
-        $instance = new Logarithm(0, 10);
+        $instance = new Logarithm(EquationValueMock::mock(0), EquationValueMock::mock(10));
         $instance->eval();
     }
     
     /**
      * @test
      */
-    public function Should_ThrowException_WhenUsingEvalWithBaseZeroAndNegativeExponent()
+    public function Should_ThrowException_WhenUsingEvalWithNegativeBase()
     {
         $this->expectException(EquationEvaluationException::class);
         
-        $instance = new Logarithm(-5, 10);
+        $instance = new Logarithm(EquationValueMock::mock(-5), EquationValueMock::mock(10));
         $instance->eval();
     }
 }

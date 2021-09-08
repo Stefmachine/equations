@@ -5,6 +5,7 @@ namespace Stefmachine\Equations\Operation;
 
 
 use Stefmachine\Equations\EquationInterface;
+use Stefmachine\Equations\Exception\EquationEvaluationException;
 use Stefmachine\Equations\Helper\EqHelper;
 use Stefmachine\Equations\Helper\EvalCatchTrait;
 
@@ -15,29 +16,25 @@ class Modulo implements EquationOperationInterface
     protected $dividend;
     protected $divisor;
     
-    public function __construct($_dividend, $_divisor)
+    public function __construct(EquationInterface $_dividend, EquationInterface $_divisor)
     {
-        $this->dividend = EqHelper::parseValue($_dividend);
-        $this->divisor = EqHelper::parseValue($_divisor);
+        $this->dividend = $_dividend;
+        $this->divisor = $_divisor;
     }
     
     public function toString(array $_values = array(), array $_options = array()): string
     {
-        return EqHelper::join([EqHelper::wrap($this->getDividend()), ' mod ', EqHelper::wrap($this->getDivisor())], $_values, $_options);
+        return EqHelper::join([EqHelper::wrap($this->dividend), ' mod ', EqHelper::wrap($this->divisor)], $_values, $_options);
     }
     
     protected function tryEval(array $_values = array(), array $_options = array()): float
     {
-        return $this->getDividend()->eval($_values, $_options) % $this->getDivisor()->eval($_values, $_options);
-    }
+        $divisor = $this->divisor->eval($_values, $_options);
     
-    protected function getDividend(): EquationInterface
-    {
-        return $this->dividend;
-    }
+        if($divisor == 0){
+            throw new EquationEvaluationException("Attempted to modulo by zero in equation: {equation}", $this, $_values);
+        }
     
-    protected function getDivisor(): EquationInterface
-    {
-        return $this->divisor;
+        return $this->dividend->eval($_values, $_options) % $divisor;
     }
 }

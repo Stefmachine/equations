@@ -14,23 +14,18 @@ class Floor implements EquationOperationInterface
     
     protected $value;
     
-    public function __construct($_value)
+    public function __construct(EquationInterface $_value)
     {
-        $this->value = EqHelper::parseValue($_value);
+        $this->value = $_value;
     }
     
     public function toString(array $_values = array(), array $_options = array()): string
     {
-        return EqHelper::join(['⌊', EqHelper::wrap($this->getValue()), '⌋'], $_values, $_options);
+        return EqHelper::join(['⌊', EqHelper::wrap($this->value), '⌋'], $_values, $_options);
     }
     
     protected function tryEval(array $_values = array(), array $_options = array()): float
     {
-        return floor($this->getValue()->eval($_values, $_options));
-    }
-    
-    protected function getValue(): EquationInterface
-    {
-        return $this->value;
+        return floor($this->value->eval($_values, $_options));
     }
 }

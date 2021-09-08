@@ -15,29 +15,19 @@ class Multiplication implements EquationOperationInterface
     protected $factorA;
     protected $factorB;
     
-    public function __construct($_factorA, $_factorB)
+    public function __construct(EquationInterface $_factorA, EquationInterface $_factorB)
     {
-        $this->factorA = EqHelper::parseValue($_factorA);
-        $this->factorB = EqHelper::parseValue($_factorB);
+        $this->factorA = $_factorA;
+        $this->factorB = $_factorB;
     }
     
     public function toString(array $_values = array(), array $_options = array()): string
     {
-        return EqHelper::join([EqHelper::wrap($this->getFactorA()), ' * ', EqHelper::wrap($this->getFactorB())], $_values, $_options);
+        return EqHelper::join([EqHelper::wrap($this->factorA), ' * ', EqHelper::wrap($this->factorB)], $_values, $_options);
     }
     
     protected function tryEval(array $_values = array(), array $_options = array()): float
     {
-        return $this->getFactorA()->eval($_values, $_options) * $this->getFactorB()->eval($_values, $_options);
-    }
-    
-    protected function getFactorA(): EquationInterface
-    {
-        return $this->factorA;
-    }
-    
-    protected function getFactorB(): EquationInterface
-    {
-        return $this->factorB;
+        return $this->factorA->eval($_values, $_options) * $this->factorB->eval($_values, $_options);
     }
 }
