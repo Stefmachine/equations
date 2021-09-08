@@ -31,10 +31,30 @@ class MultiplicationTest extends EquationTest
     /**
      * @test
      */
+    public function Should_ReturnString_WhenUsingToStringWithManyFactors()
+    {
+        $instance = new Multiplication(EquationValueMock::mock(1), EquationValueMock::mock(3), EquationValueMock::mock(4));
+        
+        $this->assertSame('1 * 3 * 4', $instance->toString());
+    }
+    
+    /**
+     * @test
+     */
     public function Should_ReturnResult_WhenUsingEval()
     {
         $instance = new Multiplication(EquationValueMock::mock(1), EquationValueMock::mock(3));
     
         $this->assertSame(3.0, $instance->eval());
+    }
+    
+    /**
+     * @test
+     */
+    public function Should_ReturnResult_WhenUsingEvalWithManyFactors()
+    {
+        $instance = new Multiplication(EquationValueMock::mock(1), EquationValueMock::mock(3), EquationValueMock::mock(4));
+    
+        $this->assertSame(12.0, $instance->eval());
     }
 }

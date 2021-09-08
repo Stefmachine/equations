@@ -12,22 +12,24 @@ class Multiplication implements EquationOperationInterface
 {
     use EvalCatchTrait;
     
-    protected $factorA;
-    protected $factorB;
+    protected $factors;
     
-    public function __construct(EquationInterface $_factorA, EquationInterface $_factorB)
+    public function __construct(EquationInterface $_factorA, EquationInterface $_factorB, EquationInterface ...$_otherFactors)
     {
-        $this->factorA = $_factorA;
-        $this->factorB = $_factorB;
+        $this->factors = array_merge([$_factorA, $_factorB], $_otherFactors);
     }
     
     public function toString(array $_values = array(), array $_options = array()): string
     {
-        return EqHelper::join([EqHelper::wrap($this->factorA), ' * ', EqHelper::wrap($this->factorB)], $_values, $_options);
+        return array_reduce($this->factors, function(string $_string, EquationInterface $_equation) use(&$_values, &$_options){
+            return (!empty($_string) ? "{$_string} * " : '') . EqHelper::wrap($_equation)->toString($_values, $_options);
+        }, '');
     }
     
     protected function tryEval(array $_values = array(), array $_options = array()): float
     {
-        return $this->factorA->eval($_values, $_options) * $this->factorB->eval($_values, $_options);
+        return array_reduce($this->factors, function(float $_product, EquationInterface $_equation) use(&$_values, &$_options){
+            return $_product * $_equation->eval($_values, $_options);
+        }, 1);
     }
 }

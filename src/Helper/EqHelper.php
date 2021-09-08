@@ -17,7 +17,7 @@ final class EqHelper
     private function __construct(){}
     
     /**
-     * @param EquationInterface|numeric|numeric-string|string|null $_value
+     * @param EquationInterface|numeric|numeric-string|string $_value
      * @return EquationInterface
      */
     public static function parseValue($_value): EquationInterface
@@ -34,7 +34,16 @@ final class EqHelper
             return new Variable($_value);
         }
     
-        throw new EquationException("Expected value to be an instance of ".EquationInterface::class.", a numeric, a numeric string, a string representing a variable name or null. Got '".gettype($_value)."'.");
+        throw new EquationException("Expected value to be an instance of ".EquationInterface::class.", a numeric, a numeric string, a string representing a variable name. Got '".gettype($_value)."'.");
+    }
+    
+    /**
+     * @param array<EquationInterface|numeric|numeric-string|string> $_values
+     * @return EquationInterface[]
+     */
+    public static function parseValues(array $_values): array
+    {
+        return array_map([static::class, 'parseValue'], $_values);
     }
     
     public static function isValidValue($_value): bool

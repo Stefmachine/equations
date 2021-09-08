@@ -29,9 +29,9 @@ use Stefmachine\Equations\Value\Variable;
 class Eq
 {
     // OPERATIONS
-    public static function plus($_addendA, $_addendB): Addition
+    public static function plus($_addendA, $_addendB, ...$_otherAddends): Addition
     {
-        return new Addition(EqHelper::parseValue($_addendA), EqHelper::parseValue($_addendB));
+        return new Addition(EqHelper::parseValue($_addendA), EqHelper::parseValue($_addendB), ...EqHelper::parseValues($_otherAddends));
     }
     
     public static function minus($_minuend, $_subtrahend): Subtraction
@@ -39,9 +39,9 @@ class Eq
         return new Subtraction(EqHelper::parseValue($_minuend), EqHelper::parseValue($_subtrahend));
     }
     
-    public static function multiply($_factorA, $_factorB): Multiplication
+    public static function multiply($_factorA, $_factorB, ...$_otherFactors): Multiplication
     {
-        return new Multiplication(EqHelper::parseValue($_factorA), EqHelper::parseValue($_factorB));
+        return new Multiplication(EqHelper::parseValue($_factorA), EqHelper::parseValue($_factorB), ...EqHelper::parseValues($_otherFactors));
     }
     
     public static function divide($_dividend, $_divisor): Division

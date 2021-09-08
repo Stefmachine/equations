@@ -31,10 +31,30 @@ class AdditionTest extends EquationTest
     /**
      * @test
      */
+    public function Should_ReturnString_WhenUsingToStringWithManyAddends()
+    {
+        $instance = new Addition(EquationValueMock::mock(1), EquationValueMock::mock(3), EquationValueMock::mock(4));
+        
+        $this->assertSame('1 + 3 + 4', $instance->toString());
+    }
+    
+    /**
+     * @test
+     */
     public function Should_ReturnResult_WhenUsingEval()
     {
         $instance = new Addition(EquationValueMock::mock(1), EquationValueMock::mock(3));
     
         $this->assertSame(4.0, $instance->eval());
+    }
+    
+    /**
+     * @test
+     */
+    public function Should_ReturnResult_WhenUsingEvalWithManyAddends()
+    {
+        $instance = new Addition(EquationValueMock::mock(1), EquationValueMock::mock(3), EquationValueMock::mock(4));
+    
+        $this->assertSame(8.0, $instance->eval());
     }
 }

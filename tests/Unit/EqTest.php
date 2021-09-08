@@ -6,9 +6,6 @@ use Stefmachine\Equations\Eq;
 use PHPUnit\Framework\TestCase;
 use Stefmachine\Equations\Operation\Absolute;
 use Stefmachine\Equations\Operation\Addition;
-use Stefmachine\Equations\Operation\ArcCosine;
-use Stefmachine\Equations\Operation\ArcSine;
-use Stefmachine\Equations\Operation\ArcTangent;
 use Stefmachine\Equations\Operation\Ceiling;
 use Stefmachine\Equations\Operation\Cosine;
 use Stefmachine\Equations\Operation\Division;
@@ -48,6 +45,14 @@ class EqTest extends TestCase
     /**
      * @test
      */
+    public function Should_ReturnInstanceOfAddition_WhenUsingMultiplyWithMoreFactors()
+    {
+        $this->assertInstanceOf(Multiplication::class, Eq::multiply(1, 1, 1, 1, 1));
+    }
+    
+    /**
+     * @test
+     */
     public function Should_ReturnInstanceOfSubtraction_WhenUsingMinus()
     {
         $this->assertInstanceOf(Subtraction::class, Eq::minus(1, 1));
@@ -59,6 +64,14 @@ class EqTest extends TestCase
     public function Should_ReturnInstanceOfAddition_WhenUsingPlus()
     {
         $this->assertInstanceOf(Addition::class, Eq::plus(1, 1));
+    }
+    
+    /**
+     * @test
+     */
+    public function Should_ReturnInstanceOfAddition_WhenUsingPlusWithMoreAddends()
+    {
+        $this->assertInstanceOf(Addition::class, Eq::plus(1, 1, 1, 1, 1));
     }
     
     /**
