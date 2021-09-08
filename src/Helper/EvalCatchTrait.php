@@ -4,31 +4,32 @@
 namespace Stefmachine\Equations\Helper;
 
 
-use LogicException;
-use Stefmachine\Equations\EquationInterface;
 use Stefmachine\Equations\Exception\EquationEvaluationException;
 
 trait EvalCatchTrait
 {
-    public function eval(array $_values = array()): float
+    public function eval(array $_values = array(), array $_options = array()): float
     {
         try{
-            return $this->tryEval($_values);
+            $result = $this->tryEval($_values, $_options);
         }
         catch(EquationEvaluationException $ex){
-            if(!$this instanceof EquationInterface){
-                throw $ex;
-            }
-            
             throw EquationEvaluationException::refit($ex, $this);
         }
+        
+        if(is_nan($result)){
+            throw new EquationEvaluationException("Equation evaluation returned NAN in equation: {equation}", $this, $_values);
+        }
+        
+        return $result;
     }
     
     /**
-     * @param array $_values
+     * @param array<string, string|int> $_values
+     * @param array<string, mixed> $_options
      * @return float
      *
      * @throws EquationEvaluationException
      */
-    abstract protected function tryEval(array $_values = array()): float;
+    abstract protected function tryEval(array $_values = array(), array $_options = array()): float;
 }

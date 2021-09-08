@@ -6,9 +6,8 @@ namespace Stefmachine\Equations\Helper;
 
 use InvalidArgumentException;
 use Stefmachine\Equations\EquationInterface;
-use Stefmachine\Equations\Exception\EquationEvaluationException;
 use Stefmachine\Equations\Exception\EquationException;
-use Stefmachine\Equations\Operator\Parentheses;
+use Stefmachine\Equations\Operation\Parentheses;
 use Stefmachine\Equations\Value\Value;
 use Stefmachine\Equations\Value\EquationValueInterface;
 use Stefmachine\Equations\Value\Variable;
@@ -53,11 +52,11 @@ final class EqHelper
         return !$_equation instanceof EquationValueInterface || !$_skipValues ? new Parentheses($_equation) : $_equation;
     }
     
-    public static function join(array $_parts, array $_values = array()): string
+    public static function join(array $_parts, array $_values = array(), array $_options = array()): string
     {
-        return implode('', array_map(function($_part) use ($_values){
+        return implode('', array_map(function($_part) use (&$_values, &$_options){
             if($_part instanceof EquationInterface){
-                return $_part->toString($_values);
+                return $_part->toString($_values, $_options);
             }
             else if(is_string($_part)){
                 return $_part;
