@@ -12,7 +12,7 @@ class ComplexEquationTest extends TestCase
 {
     private function getComplexEquation(): EquationInterface
     {
-        return Eq::plus('x', Eq::divide(Eq::multiply(Eq::minus('x', 5), 'y'), 4));
+        return Eq::plus('x', Eq::divide(Eq::multiply(Eq::minus('x', 5), 'y'), Eq::plus(4, 0, 16, Eq::multiply(0, 0))));
     }
     
     /**
@@ -22,7 +22,7 @@ class ComplexEquationTest extends TestCase
     {
         $string = $this->getComplexEquation()->toString(['x' => 10]);
         
-        $this->assertSame('10 + (((10 - 5) * y) / 4)', $string);
+        $this->assertSame('10 + (((10 - 5) * y) / (4 + 0 + 16 + (0 * 0)))', $string);
     }
     
     /**
@@ -32,7 +32,7 @@ class ComplexEquationTest extends TestCase
     {
         $result = $this->getComplexEquation()->eval(['y' => 2, 'x' => 10]);
     
-        $this->assertSame(12.5, $result);
+        $this->assertSame(10.5, $result);
     }
     
     /**

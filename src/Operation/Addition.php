@@ -22,7 +22,7 @@ class Addition implements EquationOperationInterface
     public function toString(array $_values = array(), array $_options = array()): string
     {
         return array_reduce($this->addends, function(string $_string, EquationInterface $_equation) use(&$_values, &$_options){
-            return (!empty($_string) ? "{$_string} + " : '') . EqHelper::wrap($_equation)->toString($_values, $_options);
+            return ($_string !== '' ? "{$_string} + " : '') . EqHelper::wrap($_equation)->toString($_values, $_options);
         }, '');
     }
     

@@ -15,6 +15,7 @@ use Stefmachine\Equations\Operation\Floor;
 use Stefmachine\Equations\Operation\Logarithm;
 use Stefmachine\Equations\Operation\Modulo;
 use Stefmachine\Equations\Operation\Multiplication;
+use Stefmachine\Equations\Operation\Round;
 use Stefmachine\Equations\Operation\Sine;
 use Stefmachine\Equations\Operation\Subtraction;
 use Stefmachine\Equations\Operation\Tangent;
@@ -135,7 +136,7 @@ class EqTest extends TestCase
      */
     public function Should_ReturnInstanceOfFloor_WhenUsingRound()
     {
-        $this->assertInstanceOf(Floor::class, Eq::round(4));
+        $this->assertInstanceOf(Round::class, Eq::round(4));
     }
     
     /**

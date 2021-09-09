@@ -18,6 +18,7 @@ use Stefmachine\Equations\Operation\Floor;
 use Stefmachine\Equations\Operation\Logarithm;
 use Stefmachine\Equations\Operation\Modulo;
 use Stefmachine\Equations\Operation\Multiplication;
+use Stefmachine\Equations\Operation\Round;
 use Stefmachine\Equations\Operation\Sine;
 use Stefmachine\Equations\Operation\Subtraction;
 use Stefmachine\Equations\Operation\Addition;
@@ -84,9 +85,9 @@ class Eq
         return new Floor(EqHelper::parseValue($_value));
     }
     
-    public static function round($_value): Floor
+    public static function round($_value): Round
     {
-        return new Floor(Eq::plus($_value, 0.5));
+        return new Round(EqHelper::parseValue($_value));
     }
     
     public static function ceil($_value): Ceiling
